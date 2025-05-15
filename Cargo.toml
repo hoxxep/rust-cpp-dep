@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = ["example-binding", "example-lib"]
+
+[workspace.dependencies]
+example-lib = { path = "example-lib" }
+example-binding = { path = "example-binding" }
