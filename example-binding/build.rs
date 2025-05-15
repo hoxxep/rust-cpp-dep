@@ -13,7 +13,10 @@ fn main() {
     if !dir.exists() {
         panic!("Failed to properly resolve cpp/ dir: {}", dir.display());
     }
-
+    
+    // FIXED! The LTO causes the linking issue but only when:
+    // - we are using the rust crate example-binding as a dependency 
+    // - the platform is using --as-needed to link the library
     cc::Build::new()
         .cpp(true)
         .file(dir.join("stuff.cpp"))
@@ -21,7 +24,7 @@ fn main() {
         .std("c++20")
         .opt_level(3)
         .flag_if_supported("-march=native")
-        .flag("-flto")
+        // .flag("-flto")  // <- This causes the linking issue
         .compile("stuff_from_cpp");
     
     println!("cargo:rerun-if-changed={}/stuff.h", dir.display());
